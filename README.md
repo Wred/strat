@@ -1,4 +1,2 @@
 # strat
-Simple RTS
-
-Having some fun working with ES6.
+Web based real time strategy game.
