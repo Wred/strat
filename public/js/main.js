@@ -1,7 +1,7 @@
 "use strict";
 
 function Main() {
-	var units = {},
+	var state = {},
 			canvas,
 			context,
 			socket,
@@ -22,8 +22,11 @@ function Main() {
 				// start
 				gameLoop();
 			});
-			socket.on('command', function (data) {
-				units = data;
+			socket.on('state', function (_state) {
+				state = _state;
+			});
+			socket.on('patch', function (patch) {
+				jsonpatch.apply(state, patch);
 			});
 		}
 
@@ -42,8 +45,8 @@ function Main() {
 			var time = performance.now() + timeStart;
 
 			// loop through elements
-			for (var unit in units) {
-				var unit = units[unit];
+			for (var unit in state.units) {
+				var unit = state.units[unit];
 				var pos = getPositionAtTime(unit.moveCommand.position, unit.moveCommand.velocity, unit.moveCommand.direction, time - unit.moveCommand.timeStamp);
 				context.fillRect(Math.floor(canvas.width / 2 + pos[0]), Math.floor(canvas.height / 2 + pos[1]), 2, 2);
 			}
