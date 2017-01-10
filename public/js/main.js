@@ -28,6 +28,13 @@ function Main() {
 			socket.on('patch', function (patch) {
 				jsonpatch.apply(state, patch);
 			});
+
+			canvas.addEventListener("click", function (e) {
+				var observer = jsonpatch.observe(state);
+				state.units["0"].moveCommand.direction += Math.PI / 4;
+				var patch = jsonpatch.generate(observer);
+				socket.emit('patch', patch);
+			});
 		}
 
 		function getPositionAtTime(position, velocity, direction, time) {
@@ -47,7 +54,7 @@ function Main() {
 			// loop through elements
 			for (var unit in state.units) {
 				var unit = state.units[unit];
-				var pos = getPositionAtTime(unit.moveCommand.position, unit.moveCommand.velocity, unit.moveCommand.direction, time - unit.moveCommand.timeStamp);
+				var pos = getPositionAtTime(unit.moveCommand.position, unit.moveCommand.velocity, unit.moveCommand.direction, time - unit.moveCommand.time);
 				context.fillRect(Math.floor(canvas.width / 2 + pos[0]), Math.floor(canvas.height / 2 + pos[1]), 2, 2);
 			}
 
