@@ -11,7 +11,9 @@ http.listen(80, function(){
 });
 
 io.on('connection', function(socket){
+  // send current time to client to sync up
   socket.emit('time', getTime());
+  // send current game state
   socket.emit('state', state);
   // console.log(io.sockets.connected);
 
@@ -24,11 +26,12 @@ io.on('connection', function(socket){
     var time = getTime();
     jsonpatch.apply(state, patch);
     addEvent(time, patch);
+    io.emit('patch', patch);
   });
 });
 
 function getTime() {
-  var timeTupple = process.hrtime(startTime);
+  var timeTupple = process.hrtime(state.startTime);
   return timeTupple[0] * 1e3 + timeTupple[1] / 1e6;
 }
 
@@ -42,8 +45,8 @@ function getPositionAtTime(moveCommand, time) {
 var tickCount = 0,
     turnEvery = 2000; // ms
 
-var startTime = process.hrtime();
 var state = {
+  startTime: process.hrtime(),
   units: {
     "0": {
       moveCommand: {

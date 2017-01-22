@@ -9,8 +9,8 @@ function Main() {
 
 		function setup() {
 			canvas = document.createElement("canvas"),
-			canvas.width = 1000;
-			canvas.height = 1000;
+			canvas.width = 500;
+			canvas.height = 500;
 			document.body.appendChild(canvas);
 			context = canvas.getContext("2d");
 			context.fillStyle = "white";
@@ -23,15 +23,17 @@ function Main() {
 				gameLoop();
 			});
 			socket.on('state', function (_state) {
+				// complete state update
 				state = _state;
 			});
 			socket.on('patch', function (patch) {
+				// granular state update
 				jsonpatch.apply(state, patch);
 			});
 
 			canvas.addEventListener("click", function (e) {
 				var observer = jsonpatch.observe(state);
-				state.units["0"].moveCommand.direction += Math.PI / 4;
+				state.units["0"].moveCommand.direction += Math.PI / 10;
 				var patch = jsonpatch.generate(observer);
 				socket.emit('patch', patch);
 			});
@@ -55,7 +57,7 @@ function Main() {
 			for (var unit in state.units) {
 				var unit = state.units[unit];
 				var pos = getPositionAtTime(unit.moveCommand.position, unit.moveCommand.velocity, unit.moveCommand.direction, time - unit.moveCommand.time);
-				context.fillRect(Math.floor(canvas.width / 2 + pos[0]), Math.floor(canvas.height / 2 + pos[1]), 2, 2);
+				context.fillRect(Math.floor(canvas.width / 2 + pos[0]), Math.floor(canvas.height / 2 + pos[1]), 10, 10);
 			}
 
 			requestAnimationFrame(gameLoop)
