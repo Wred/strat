@@ -9,8 +9,8 @@ function Main() {
 
 		function setup() {
 			canvas = document.createElement("canvas"),
-			canvas.width = 500;
-			canvas.height = 500;
+			canvas.width = window.outerWidth;
+			canvas.height = window.outerHeight;
 			document.body.appendChild(canvas);
 			context = canvas.getContext("2d");
 			context.fillStyle = "white";
@@ -33,7 +33,7 @@ function Main() {
 
 			canvas.addEventListener("click", function (e) {
 				var observer = jsonpatch.observe(state);
-				state.units["0"].moveCommand.direction += Math.PI / 10;
+				state.units["0"].direction += Math.PI / 10;
 				var patch = jsonpatch.generate(observer);
 				socket.emit('patch', patch);
 			});
@@ -56,7 +56,12 @@ function Main() {
 			// loop through elements
 			for (var unit in state.units) {
 				var unit = state.units[unit];
-				var pos = getPositionAtTime(unit.moveCommand.position, unit.moveCommand.velocity, unit.moveCommand.direction, time - unit.moveCommand.time);
+				var pos = getPositionAtTime(
+					unit.commands[0].positionStart,
+					unit.velocity,
+					unit.direction,
+					time - unit.commands[0].time
+				);
 				context.fillRect(Math.floor(canvas.width / 2 + pos[0]), Math.floor(canvas.height / 2 + pos[1]), 10, 10);
 			}
 
