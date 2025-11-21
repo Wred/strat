@@ -28,7 +28,7 @@ function Main() {
 			})
 			socket.on('patch', function (patch) {
 				// granular state update
-				jsonpatch.apply(state, patch)
+				jsonpatch.applyPatch(state, patch)
 			})
 
 			canvas.addEventListener("click", function (e) {
