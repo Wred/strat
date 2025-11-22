@@ -13,7 +13,7 @@ function Main() {
 			canvas.height = window.outerHeight
 			document.body.appendChild(canvas)
 			context = canvas.getContext("2d")
-			context.fillStyle = "white"
+			context.fillStyle = "black"
 
 			socket = io()
 			socket.on('time', function (data) {
@@ -73,7 +73,7 @@ function Main() {
 
 			context.beginPath();
 			context.arc(canvas.width / 2 + x, canvas.height / 2 + y, 5, 0, 2 * Math.PI, false);
-			context.fillStyle = 'black';
+			context.fillStyle = 'white';
 			context.fill();
 		}
 
