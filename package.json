@@ -20,6 +20,7 @@
   "dependencies": {
     "express": "^4.14.0",
     "fast-json-patch": "^1.1.4",
-    "socket.io": "^1.7.2"
+    "socket.io": "^1.7.2",
+    "three": "^0.181.2"
   }
 }

@@ -5,7 +5,14 @@ var io = require('socket.io')(http);
 
 var game = require('./lib/main.js')(io);
 
-app.use(express.static('public'))
+// Set correct MIME type for JavaScript modules
+app.use(express.static('public', {
+  setHeaders: function(res, path) {
+    if (path.endsWith('.js')) {
+      res.setHeader('Content-Type', 'application/javascript');
+    }
+  }
+}))
 
 const PORT = process.env.PORT || 3000;
 http.listen(PORT, function(){
